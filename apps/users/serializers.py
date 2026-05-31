@@ -62,4 +62,12 @@ class MyProfileSerializer(serializers.ModelSerializer):
         fields = ["bio", "avatar", "gender", "birth_date", "location", "username"]
 
 
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop("user", None)
+
+        if user_data:
+            instance.user.username = user_data["username"]
+            instance.user.save()
+
+        return super().update(instance, validated_data)
 

@@ -76,3 +76,16 @@ class MyProfileView(APIView):
     def get(self, request):
         serializer = MyProfileSerializer(request.user.user_profile)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class UpdateProfileView(APIView):
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def put(self, request):
+        profile = request.user.user_profile
+        serializer = MyProfileSerializer(profile, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(request.data, status=status.HTTP_200_OK)
+
