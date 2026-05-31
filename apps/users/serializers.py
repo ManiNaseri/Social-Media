@@ -55,7 +55,11 @@ class LoginSerializer(serializers.Serializer):
     )
 
 class MyProfileSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source="user.username", required=False)
+
     class Meta:
         model = UserProfile
-        fields = "__all__"
+        fields = ["bio", "avatar", "gender", "birth_date", "location", "username"]
+
+
 
