@@ -7,6 +7,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import (
     RegisterSerializer,
     LoginSerializer,
+    MyProfileSerializer
 )
 
 User = get_user_model()
@@ -67,3 +68,11 @@ class LoginView(APIView):
             },
             status=status.HTTP_200_OK,
         )
+
+class MyProfileView(APIView):
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        serializer = MyProfileSerializer(request.user.user_profile)
+        return Response(serializer.data, status=status.HTTP_200_OK)

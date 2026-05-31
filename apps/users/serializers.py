@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
-
+from .models import UserProfile
 User = get_user_model()
 
 
@@ -53,3 +53,9 @@ class LoginSerializer(serializers.Serializer):
         write_only=True,
         required=True,
     )
+
+class MyProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = "__all__"
+
