@@ -3,11 +3,13 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+from .models import UserProfile
+from django.shortcuts import get_object_or_404
 
 from .serializers import (
     RegisterSerializer,
     LoginSerializer,
-    MyProfileSerializer
+    ProfileSerializer
 )
 
 User = get_user_model()
@@ -74,7 +76,7 @@ class MyProfileView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        serializer = MyProfileSerializer(request.user.user_profile)
+        serializer = ProfileSerializer(request.user.user_profile)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class UpdateProfileView(APIView):
@@ -83,9 +85,20 @@ class UpdateProfileView(APIView):
 
     def put(self, request):
         profile = request.user.user_profile
-        serializer = MyProfileSerializer(profile, data=request.data, partial=True)
+        serializer = ProfileSerializer(profile, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
         return Response(request.data, status=status.HTTP_200_OK)
+
+
+class ProfileView(APIView):
+
+    def get(self, request):
+        username = request.GET.get("username")
+        profile = get_object_or_404(UserProfile, user__username=username)
+        serilizer = ProfileSerializer(instance=profile)
+        if serilizer:
+            return Response(serilizer.data, status=status.HTTP_200_OK)
+        return Response(serilizer.data, status=status.HTTP_400_BAD_REQUEST)
 

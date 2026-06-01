@@ -54,7 +54,7 @@ class LoginSerializer(serializers.Serializer):
         required=True,
     )
 
-class MyProfileSerializer(serializers.ModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source="user.username", required=False)
 
     class Meta:
@@ -70,4 +70,5 @@ class MyProfileSerializer(serializers.ModelSerializer):
             instance.user.save()
 
         return super().update(instance, validated_data)
+
 
