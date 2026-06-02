@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import get_object_or_404
-from .models import UserProfile
-
+from .models import UserProfile, Follow, FollowRequest
+from .validators import validator_target_user
 
 from .serializers import (
     RegisterSerializer,
@@ -128,3 +128,5 @@ class ProfileView(APIView):
         if serilizer:
             return Response(serilizer.data, status=status.HTTP_200_OK)
         return Response(serilizer.data, status=status.HTTP_400_BAD_REQUEST)
+
+    
