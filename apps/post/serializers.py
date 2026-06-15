@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post , PostMedia
+from .models import Post , PostMedia, SavedPost
 from .validators import MediaValidationMixin
 
 
@@ -71,4 +71,16 @@ class ExploreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         exclude = ["updated_at"]
+
+class SavedPostSerializer(serializers.ModelSerializer):
+    owner = serializers.CharField(source="post.owner.username", read_only=True)
+    media = PostMediaSerializer(many=True,read_only=True, source="post.media")
+    caption = serializers.CharField(source="post.caption", read_only=True)
+    likes_count = serializers.IntegerField(source="post.likes_count", read_only=True)
+    comments_count = serializers.IntegerField(source="post.comments_count", read_only=True)
+    post_id = serializers.IntegerField(source="post.id", read_only=True)
+
+    class Meta:
+        model = SavedPost
+        fields = ["post_id", "owner", "media", "caption", "likes_count", "comments_count"]
 

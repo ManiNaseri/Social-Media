@@ -31,3 +31,6 @@ def get_public_posts(*, user):
 
 def get_save_post(*, post_id, user):
     return SavedPost.objects.filter(post__id=post_id, user=user).first()
+
+def get_saved_posts(*, user):
+    return SavedPost.objects.filter(user=user).order_by("-created_at")

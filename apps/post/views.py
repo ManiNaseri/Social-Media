@@ -6,13 +6,21 @@ from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
 
 
-from .selectors import get_post_by_id_for_owner , get_post_by_id , get_user_posts, get_posts, get_public_posts
+from .selectors import  (
+    get_post_by_id_for_owner,
+    get_post_by_id,
+    get_user_posts,
+    get_posts,
+    get_public_posts,
+    get_saved_posts
+)
 
 from .serializers import (
     CreatePostSerializer,
     PostSerializer,
     UpdatePostSerializer,
-    ExploreSerializer
+    ExploreSerializer,
+    SavedPostSerializer
 )
 from .services import (create_post, update_post, delete_post, save_post, unsave_post)
 from .pagination import PostPagination
@@ -144,3 +152,13 @@ class UnsavePostView(APIView):
         post_id = request.data.get("post_id")
         data = unsave_post(user=request.user, post_id=post_id)
         return Response(data, status=status.HTTP_200_OK)
+
+
+class SavedPostsView(ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = PostPagination
+
+    def get(self, request):
+        saved_posts = get_saved_posts(user=request.user)
+        serializer = SavedPostSerializer(instance=saved_posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
