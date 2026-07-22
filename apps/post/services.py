@@ -1,6 +1,6 @@
 from django.db import transaction
 from .models import PostMedia , Post, SavedPost
-from .selectors import get_post_by_id, get_save_post
+from .selectors import get_post_by_id, get_save_post, get_feed_posts
 from rest_framework.exceptions import ValidationError
 from django.db.models import Max
 

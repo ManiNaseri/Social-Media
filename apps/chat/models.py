@@ -1,3 +1,7 @@
 from django.db import models
 
-# Create your models here.
+class Conversation(models.Model):
+
+    class ConversationTypeChoices(models.TextChoices):
+        PRIVATE = "private", "Private"
+        GROUP = "group", "Group"
