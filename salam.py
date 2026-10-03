@@ -1,0 +1,3 @@
+a = "salam"
+print(a)
+
